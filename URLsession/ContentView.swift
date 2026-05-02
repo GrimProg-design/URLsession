@@ -8,15 +8,48 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var whichColor: Color = .white
+    @State private var word = ""
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
-            Text("How are you this is test")
+        ZStack{
+            HStack {
+                Spacer()
+                Button("Red") {
+                    Task {
+                        word = await wordNow("Red is now")
+                    }
+                    whichColor = .red
+                }
+                .padding()
+                .background(.white)
+                .cornerRadius(20)
+                Spacer()
+                
+                Button("Blue") {
+                    Task {
+                        word = await wordNow("Blue is now")
+                    }
+                    whichColor = .blue
+                }
+                .padding()
+                .background(.white)
+                .cornerRadius(20)
+                Spacer()
+            }
+            .padding()
+            .frame(maxHeight: .infinity)
+            .background(whichColor)
+            Text(word)
+                .font(.title)
+                .padding(.top, 150)
         }
-        .padding()
+        
+    }
+    
+    func wordNow(_ word: String) async -> String {
+        try? await Task.sleep(for: .seconds(2))
+        return word
     }
 }
 
